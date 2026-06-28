@@ -1,0 +1,280 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.10",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "10f3c00bf29b9260c4c91d0c56e7a48e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "cc244221732e9765f645dda907b76da8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"harkalm-listings-data-exploration\">Harkalm Listings Data Exploration</h1>\n<span class=\"paragraph\">This notebook explores <code>listings.csv</code> before building the classifier.</span>\n<span class=\"paragraph\">The goal is to decide which columns contain useful signal for classifying each property as:</span>\n<ul>\n<li>Nursery</li>\n<li>SEN School</li>\n<li>Food Store</li>\n<li>None</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "27c42a0a1d809fc4cc2d2d1ed9f09b29",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/json": "{\"rows\": 23, \"columns\": 67}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "5894ae68c1e1dcade2d70a72e6c9ce69",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"1-understand-the-raw-dataset\">1. Understand the raw dataset</h2></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "e6b0a07a40864e49f696edc626d95c56",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='d2af0e84-1519-5eb8-e7df-5e1dfc7f5660'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;column&#92;&quot;:&#92;&quot;id&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;summary&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;displayAddress&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;latitude&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;Float64&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;longitude&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;Float64&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;propertySubType&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;tenureType&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;price&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;Float64&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;priceFrequency&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;currencyCode&#92;&quot;,&#92;&quot;dtype&#92;&quot;:&#92;&quot;String&#92;&quot;}]&quot;' data-total-rows='67' data-total-columns='2' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;column&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;dtype&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "a9885c423bc1254426e5e3a05dd36efb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='PKri-0' random-id='77fdb096-9e97-4247-57d2-decc300273d5'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;column&#92;&quot;:&#92;&quot;changed_columns&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;message&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;location&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;date&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;matched_keyword&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;keyword&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;agentCity&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;agentEmail&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;agentName&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1},{&#92;&quot;column&#92;&quot;:&#92;&quot;agentPhone&#92;&quot;,&#92;&quot;null_count&#92;&quot;:23,&#92;&quot;percent_missing&#92;&quot;:100.0,&#92;&quot;unique_values&#92;&quot;:1}]&quot;' data-total-rows='67' data-total-columns='4' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;column&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;null_count&quot;,[&quot;integer&quot;,&quot;u32&quot;]],[&quot;percent_missing&quot;,[&quot;number&quot;,&quot;f64&quot;]],[&quot;unique_values&quot;,[&quot;integer&quot;,&quot;i64&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "8ea50b50607150c99f0e91acd3da8738",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"2-remove-obvious-non-signal-columns\">2. Remove obvious non-signal columns</h2>\n<span class=\"paragraph\">The original CSV has many fields that describe the listing source, agent, scrape metadata, or update lifecycle.</span>\n<span class=\"paragraph\">Those fields do not help answer: <strong>what kind of property is this?</strong></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "acd05f7bac5c8225dba90d3c77b7b597",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/json": "{\"original_columns\": 67, \"dropped_metadata_columns\": 23, \"dropped_fully_null_columns\": 11, \"remaining_columns\": 33}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "8a3bb383ac50309b9fb750828eae9196",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "dda316197e805e4dd920e77a0231b256",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"3-profile-the-remaining-candidate-columns\">3. Profile the remaining candidate columns</h2></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "4229886d55b81b2e9e43132d5be20909",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='Kclp-0' random-id='05f4ab25-f05e-0c8c-9909-bc689bb25960'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;column&#92;&quot;:&#92;&quot;sizeAc&#92;&quot;,&#92;&quot;null_count&#92;&quot;:18,&#92;&quot;percent_missing&#92;&quot;:78.26,&#92;&quot;unique_values&#92;&quot;:6},{&#92;&quot;column&#92;&quot;:&#92;&quot;tenureType&#92;&quot;,&#92;&quot;null_count&#92;&quot;:16,&#92;&quot;percent_missing&#92;&quot;:69.57,&#92;&quot;unique_values&#92;&quot;:2},{&#92;&quot;column&#92;&quot;:&#92;&quot;floorAreaUnits&#92;&quot;,&#92;&quot;null_count&#92;&quot;:16,&#92;&quot;percent_missing&#92;&quot;:69.57,&#92;&quot;unique_values&#92;&quot;:2},{&#92;&quot;column&#92;&quot;:&#92;&quot;sizeFt&#92;&quot;,&#92;&quot;null_count&#92;&quot;:15,&#92;&quot;percent_missing&#92;&quot;:65.22,&#92;&quot;unique_values&#92;&quot;:9},{&#92;&quot;column&#92;&quot;:&#92;&quot;name&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:6},{&#92;&quot;column&#92;&quot;:&#92;&quot;description&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:10},{&#92;&quot;column&#92;&quot;:&#92;&quot;currency&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:2},{&#92;&quot;column&#92;&quot;:&#92;&quot;pointsOfInterest&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:10},{&#92;&quot;column&#92;&quot;:&#92;&quot;analyticsTaxonomy&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:10},{&#92;&quot;column&#92;&quot;:&#92;&quot;pricePerUnit&#92;&quot;,&#92;&quot;null_count&#92;&quot;:14,&#92;&quot;percent_missing&#92;&quot;:60.87,&#92;&quot;unique_values&#92;&quot;:9}]&quot;' data-total-rows='33' data-total-columns='4' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;column&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;null_count&quot;,[&quot;integer&quot;,&quot;u32&quot;]],[&quot;percent_missing&quot;,[&quot;number&quot;,&quot;f64&quot;]],[&quot;unique_values&quot;,[&quot;integer&quot;,&quot;i64&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "1c4ced5d02af35fccdd6e2112fe0d7bf",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "172a09c6d0d25436e7b86671adbdeb9a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"4-inspect-candidate-classification-fields\">4. Inspect candidate classification fields</h2>\n<span class=\"paragraph\">Now inspect the fields that may help a human classify the property.</span>\n<span class=\"paragraph\">The goal is to identify the fields worth passing into preprocessing and eventually into the LLM prompt.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "c86b3a66192dca2d647605ff8aac5b87",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/json": "[\"pageTitle\", \"summary\", \"description\", \"detailedDescription\", \"shareDescription\", \"keyFeatures\", \"propertySubType\", \"name\", \"infoReelItems\", \"analyticsTaxonomy\"]"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "f55354b506f610f4fb94150463514e1c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='iLit-0' random-id='90daef87-1d20-25f1-2839-9f007ac8c139'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;column&#92;&quot;:&#92;&quot;pageTitle&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null},{&#92;&quot;column&#92;&quot;:&#92;&quot;summary&#92;&quot;,&#92;&quot;column_0&#92;&quot;:&#92;&quot;FOR SALE - Freehold former Co-op convenience store, Bicester, Oxfordshire&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;description&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null},{&#92;&quot;column&#92;&quot;:&#92;&quot;detailedDescription&#92;&quot;,&#92;&quot;column_0&#92;&quot;:&#92;&quot;Freehold retail unit comprising a former Co-op convenience store, vacant since the operator&#x27;s relocation to a larger format store on the edge of town. A1 use class throughout. The property benefits from a prominent corner position on Sheep Street with excellent footfall from both pedestrian and vehicular traffic. Internally the unit retains chiller cabinets, shelving runs and a rear stockroom from its previous use, with potential for a new food retail operator to fit out with minimal works. Rear servicing yard provides delivery access. Energy performance certificate available on request.&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;shareDescription&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null},{&#92;&quot;column&#92;&quot;:&#92;&quot;keyFeatures&#92;&quot;,&#92;&quot;column_0&#92;&quot;:&#92;&quot;[&#x27;A1 Use Class&#x27;, &#x27;Former Co-op convenience store&#x27;, &#x27;1,850 sq ft ground floor&#x27;, &#x27;Vacant possession&#x27;, &#x27;High footfall town centre location&#x27;, &#x27;Rear loading access&#x27;]&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;propertySubType&#92;&quot;,&#92;&quot;column_0&#92;&quot;:&#92;&quot;retail&#92;&quot;},{&#92;&quot;column&#92;&quot;:&#92;&quot;name&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null},{&#92;&quot;column&#92;&quot;:&#92;&quot;infoReelItems&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null},{&#92;&quot;column&#92;&quot;:&#92;&quot;analyticsTaxonomy&#92;&quot;,&#92;&quot;column_0&#92;&quot;:null}]&quot;' data-total-rows='10' data-total-columns='2' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;column&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;column_0&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZHCJ",
+      "code_hash": "65fdc30cc3bc419cd016df5372c1725e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='ZHCJ-0' random-id='8133c9c1-85e2-4c51-6ae9-75d61b1fd3c8'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;pageTitle&#92;&quot;:null,&#92;&quot;summary&#92;&quot;:&#92;&quot;FOR SALE - Freehold former Co-op convenience store, Bicester, Oxfordshire&#92;&quot;,&#92;&quot;description&#92;&quot;:null,&#92;&quot;detailedDescription&#92;&quot;:&#92;&quot;Freehold retail unit comprising a former Co-op convenience store, vacant since the operator&#x27;s relocation to a larger format store on the edge of town. A1 use class throughout. The property benefits from a prominent corner position on Sheep Street with excellent footfall from both pedestrian and vehicular traffic. Internally the unit retains chiller cabinets, shelving runs and a rear stockroom from its previous use, with potential for a new food retail operator to fit out with minimal works. Rear servicing yard provides delivery access. Energy performance certificate available on request.&#92;&quot;,&#92;&quot;shareDescription&#92;&quot;:null,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;A1 Use Class&#x27;, &#x27;Former Co-op convenience store&#x27;, &#x27;1,850 sq ft ground floor&#x27;, &#x27;Vacant possession&#x27;, &#x27;High footfall town centre location&#x27;, &#x27;Rear loading access&#x27;]&#92;&quot;,&#92;&quot;propertySubType&#92;&quot;:&#92;&quot;retail&#92;&quot;,&#92;&quot;name&#92;&quot;:null,&#92;&quot;infoReelItems&#92;&quot;:null,&#92;&quot;analyticsTaxonomy&#92;&quot;:null},{&#92;&quot;pageTitle&#92;&quot;:&#92;&quot;Land for sale in  Plots 62 to 68, Fryarne Park, Stelling Minnis Canterbury, CT46BL, CT4&#92;&quot;,&#92;&quot;summary&#92;&quot;:&#92;&quot;** Timed Online Auction - 02 July 2026 ** EXCELLENT OPPORTUNITY to purchase a plot just over an acre of Land in PEACEFUL COUNTRYSIDE SETTING with panoramic countryside views. RARELY AVAILABLE parcel of ancient woodland..&#92;&quot;,&#92;&quot;description&#92;&quot;:null,&#92;&quot;detailedDescription&#92;&quot;:&#92;&quot;** SALE BY AUCTION - 02 July 2026 - Timed Online Auction ** EXCELLENT OPPORTUNITY to purchase a plot just over an acre of Land in PEACEFUL COUNTRYSIDE SETTING with panoramic countryside views. RARELY AVAILABLE parcel of ancient woodland. Old brown field sites, opportunity to develop an eco-home hidden within the gully subject to planning. PICTURESQUE LOCATION an abundance of flora and fauna. The ancient bluebell carpet is particularly spectacular. Also comprises some old flint quarries which are now gullies facing the lane. The upper part of the woodland contains the bluebells but the old quarries are an excellent source of logs for wood burners. There is access to a water source nearby. This exceptional plot may represent an opportunity to build in a peaceful yet well-connected location subject to researching and gaining the necessary consents and usage rights. EXCELLENT LOCATION Overall, Fryarne Park offers an attractive combination of rural tranquillity, strong community spirit, beautiful countryside, and access to Canterbury, Fryarne Park) is a rural residential area on the edge of the village of Stelling Minnis, located approximately 8 miles (13 km) south of Canterbury within the beautiful Kent Downs. Historically, Fryarne Park has been associated with a medieval estate and parkland, and today it is known for its peaceful countryside setting, mature woodland, and attractive rural surroundings. The area appeals to buyers seeking a quiet village lifestyle with larger properties, open views, and access to nature while remaining within commuting distance of Canterbury and the Kent coast. The local community is one of Stelling Minnis&#x27;s strongest attractions. The village has a traditional, close-knit atmosphere where residents are actively involved in local events, conservation projects, and parish activities. The large village common, one of the few surviving historic commons in Kent, acts as a focal point for community life and outdoor recreation. Residents often describe the area as friendly, safe, and family-oriented, with a strong sense of belonging that is increasingly rare in larger towns. Amenities are modest but sufficient for everyday village living. The village benefits from Stelling Minnis Post Office and Stores, which provides groceries, postal services, and daily essentials. There is also the well-known Rose and Crown pub, a popular social hub for residents. For a wider range of shopping, most residents travel to Canterbury, Ashford, or Folkestone. Auction Details 02 July 2026, 10am-3pm Timed Online Auction How to Bid Now Submit an enquiry now or visit our website for full details on how to BID ON THIS PROPERTY. Future Property Auctions - Scotland&#x27;s Largest Land and Property Auction House. Over 400 lots auctioned every 2 weeks including flats, houses, land &amp; commercial. Get a Fast Sale and a Fair Price with Future Property Auctions. Contact Us now for a FREE Auction Valuation.&#92;&#92;n&#92;&#92;nKey Features:&#92;&#92;nEXCELLENT OPPORTUNITY to purchase a plot just over an acre of Land in PEACEFUL COUNTRYSIDE SETTING with panoramic countryside views. RARELY AVAILABLE parcel of ancient woodland.&#92;&#92;nPICTURESQUE LOCATION an abundance of flora and fauna. The ancient bluebell carpet is particularly spectacular. Also comprises some old flint quarries which are now gullies facing the lane.&#92;&#92;nThe upper part of the woodland contains the bluebells but the old quarries are an excellent source of logs for wood burners. There is access to a water source nearby&#92;&#92;nThis exceptional plot may represent an opportunity to build in a peaceful yet well-connected location subject to researching and gaining the necessary consents and usage rights. &#92;&#92;nEXCELLENT LOCATION Overall, Fryarne Park offers an attractive combination of rural tranquillity, strong community spirit, beautiful countryside, and access to Canterbury,&#92;&quot;,&#92;&quot;shareDescription&#92;&quot;:&#92;&quot;Land for sale in  Plots 62 to 68, Fryarne Park, Stelling Minnis Canterbury, CT46BL, CT4 for &#92;&#92;u00a321,000. Marketed by Future Property Auctions, Glasgow&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;EXCELLENT OPPORTUNITY to purchase a plot just over an acre of Land in PEACEFUL COUNTRYSIDE SETTING with panoramic countryside views. RARELY AVAILABLE parcel of ancient woodland.&#x27;, &#x27;PICTURESQUE LOCATION an abundance of flora and fauna. The ancient bluebell carpet is particularly spectacular. Also comprises some old flint quarries which are now gullies facing the lane.&#x27;, &#x27;The upper part of the woodland contains the bluebells but the old quarries are an excellent source of logs for wood burners. There is access to a water source nearby&#x27;, &#x27;This exceptional plot may represent an opportunity to build in a peaceful yet well-connected location subject to researching and gaining the necessary consents and usage rights. &#x27;, &#x27;EXCELLENT LOCATION Overall, Fryarne Park offers an attractive combination of rural tranquillity, strong community spirit, beautiful countryside, and access to Canterbury,&#x27;]&#92;&quot;,&#92;&quot;propertySubType&#92;&quot;:null,&#92;&quot;name&#92;&quot;:null,&#92;&quot;infoReelItems&#92;&quot;:&#92;&quot;[{&#x27;title&#x27;: 123, &#x27;type&#x27;: 124, &#x27;primaryText&#x27;: 10, &#x27;secondaryText&#x27;: 116, &#x27;tooltipText&#x27;: 116}, {&#x27;title&#x27;: 126, &#x27;type&#x27;: 126, &#x27;primaryText&#x27;: 127, &#x27;secondaryText&#x27;: 116, &#x27;tooltipText&#x27;: 116}]&#92;&quot;,&#92;&quot;analyticsTaxonomy&#92;&quot;:null},{&#92;&quot;pageTitle&#92;&quot;:null,&#92;&quot;summary&#92;&quot;:null,&#92;&quot;description&#92;&quot;:&#92;&quot; Summary Prime Freehold High Street Investment - Station Road, Ashington An opportunity to acquire a substantial freehold commercial investment ...&#92;&quot;,&#92;&quot;detailedDescription&#92;&quot;:&#92;&quot;Summary Prime Freehold High Street Investment - Station Road, Ashington An opportunity to acquire a substantial freehold commercial investment occupying a prime and highly visible position on Station Road, Ashington&#x27;s main High Street. The property extends to approximately 637.50 sq m (6,862 sq ft) arranged over three floors and is fully let, producing an established income stream with leases in place until 2036, offering long-term security for investors. The ground and first floors operate as a substantial retail premises with ancillary storage, while the second floor is independently utilised as a dance studio, enhancing diversification of income within the building. Situated in a strong trading position within Ashington town centre, the property benefits from excellent frontage, consistent pedestrian and vehicular traffic, nearby public parking and close proximity to national and independent occupiers. This is a rare opportunity to secure a sizeable freehold commercial asset in a dominant High Street position with long-term tenant security and significant future potential. EPC rating: E Location The subject property is well located along Station Road. This property is located within easy reach of local amenities, transport links and schools. The subject property is located approximately 0.3 miles from Ashington town centre and approximately 17.7 miles from Newcastle city centre. Accommodation The accommodation is configured as follows: Ground Floor Retail Unit: 283.90 sq m (3,056 sq ft) First Floor Storage (serving ground floor): 235.20 sq m (2,532 sq ft) Second Floor Dance Studio: 118.40 sq m (1,274 sq ft) Tenure Freehold. Title number ND63071. VAT We are advised VAT is applicable on the purchase price. EPC Available upon request. Additional Information For further information please contact our Ashington office direct on , or alternatively via e-mail on . With regards to viewing the subject property, this is to be done strictly by appointment through Keith Pattinson Commercial department. Please contact us to arrange an internal inspection, or to register your interest.&#92;&quot;,&#92;&quot;shareDescription&#92;&quot;:null,&#92;&quot;keyFeatures&#92;&quot;:null,&#92;&quot;propertySubType&#92;&quot;:&#92;&quot;retail&#92;&quot;,&#92;&quot;name&#92;&quot;:&#92;&quot;Retail premises for sale&#92;&quot;,&#92;&quot;infoReelItems&#92;&quot;:null,&#92;&quot;analyticsTaxonomy&#92;&quot;:&#92;&quot;{&#x27;__typename&#x27;: &#x27;ListingAnalyticsTaxonomy&#x27;, &#x27;location&#x27;: &#x27;Ashington&#x27;, &#x27;regionName&#x27;: &#x27;North East England&#x27;, &#x27;section&#x27;: &#x27;for-sale&#x27;, &#x27;areaName&#x27;: &#x27;Ashington&#x27;, &#x27;bedsMax&#x27;: None, &#x27;bedsMin&#x27;: None, &#x27;branchId&#x27;: 72482, &#x27;branchLogoUrl&#x27;: &#x27;https://st.zoocdn.com/zoopla_static_agent_logo_(770458).png&#x27;, &#x27;branchName&#x27;: &#x27;Pattinson - Commercial&#x27;, &#x27;brandName&#x27;: &#x27;Pattinson&#x27;, &#x27;chainFree&#x27;: False, &#x27;companyId&#x27;: 26840, &#x27;countryCode&#x27;: &#x27;gb&#x27;, &#x27;countyAreaName&#x27;: &#x27;Northumberland&#x27;, &#x27;currencyCode&#x27;: &#x27;GBP&#x27;, &#x27;displayAddress&#x27;: &#x27;Station Road, Ashington NE63&#x27;, &#x27;furnishedState&#x27;: &#x27;&#x27;, &#x27;groupId&#x27;: None, &#x27;hasEpc&#x27;: False, &#x27;hasFloorplan&#x27;: True, &#x27;incode&#x27;: &#x27;9UJ&#x27;, &#x27;isRetirementHome&#x27;: False, &#x27;isSharedOwnership&#x27;: False, &#x27;listingCondition&#x27;: &#x27;pre-owned&#x27;, &#x27;listingId&#x27;: 72439054, &#x27;listingsCategory&#x27;: &#x27;commercial&#x27;, &#x27;listingStatus&#x27;: &#x27;for_sale&#x27;, &#x27;memberType&#x27;: &#x27;agent&#x27;, &#x27;numBaths&#x27;: None, &#x27;numBeds&#x27;: None, &#x27;numImages&#x27;: 28, &#x27;numRecepts&#x27;: None, &#x27;outcode&#x27;: &#x27;NE63&#x27;, &#x27;postalArea&#x27;: &#x27;NE&#x27;, &#x27;postTownName&#x27;: &#x27;Ashington&#x27;, &#x27;priceActual&#x27;: 290000, &#x27;price&#x27;: 290000, &#x27;priceMax&#x27;: 300000, &#x27;priceMin&#x27;: 275000, &#x27;priceQualifier&#x27;: &#x27;guide_price&#x27;, &#x27;propertyHighlight&#x27;: &#x27;&#x27;, &#x27;propertyType&#x27;: &#x27;retail&#x27;, &#x27;sizeSqFeet&#x27;: &#x27;6862&#x27;, &#x27;smartTags&#x27;: None, &#x27;tenure&#x27;: None, &#x27;zindex&#x27;: None}&#92;&quot;},{&#92;&quot;pageTitle&#92;&quot;:null,&#92;&quot;summary&#92;&quot;:null,&#92;&quot;description&#92;&quot;:&#92;&quot;Mixed use freehold opportunity Former caf&#92;&#92;u00e9 with residential accommodation above Redevelopment/conversion potential STPP Prominent position on High ...&#92;&quot;,&#92;&quot;detailedDescription&#92;&quot;:&#92;&quot;Mixed use freehold opportunity Former caf&#92;&#92;u00e9 with residential accommodation above Redevelopment/conversion potential STPP Prominent position on High Street Local and Tourist trade Location Rothbury is a popular market town situated in the heart of the Northumberland National Park, approximately 26 miles north of Newcastle upon Tyne. The A697 provides access to the nearby towns of Alnwick and Morpeth and also links with the A1 trunk road approximately 8 miles to the east. Rothbury enjoys a mix of local trade from both the residents of Rothbury, as well as the surrounding villages, but also benefits from tourist trade from those visiting nearby Cragside (National Trust), Coquet Valley and the National Park. Other occupiers in the town include Co-Op, Boots, rspca and a range of other predominantly local traders. Description A substantial mixed-use property arranged over basement, ground, first and second floors, occupying a prominent position within the town centre. Previously operated as a caf&#92;&#92;u00e9, the commercial element extends across the ground and first floors, with ancillary basement storage and residential accommodation situated on the second floor. The business has now ceased trading due to retirement, and the property is offered with vacant possession. The property presents an excellent opportunity for a range of purchasers including owner occupiers, investors, developers or those seeking to convert the building back into a substantial residential dwelling, subject to any necessary consents. The flexible layout also lends itself to continued commercial use on the lower floors with residential accommodation retained above, offering potential for a live/work arrangement or mixed-use investment opportunity. Accommodation Basement Ancillary storage accommodation serving the commercial element. Ground Floor Former caf&#92;&#92;u00e9 seating area with frontage onto the street together with service/preparation areas. First Floor Additional customer seating area, commercial kitchen facilities and w.c. Accommodation. Second Floor Residential accommodation suitable for owner occupation or ancillary accommodation to the commercial premises. Key Features &#92;&#92;u2022 Prominent town centre position &#92;&#92;u2022 Mixed-use freehold opportunity &#92;&#92;u2022 Former caf&#92;&#92;u00e9 premises arranged over multiple floors &#92;&#92;u2022 Basement storage accommodation &#92;&#92;u2022 Residential accommodation to the upper floor &#92;&#92;u2022 Suitable for owner occupiers, investors or developers &#92;&#92;u2022 Potential for conversion back to a single residential dwelling (subject to consent) &#92;&#92;u2022 Potential to continue trading commercially with residential accommodation above &#92;&#92;u2022 Vacant possession We have measured the property as providing the following internal floor areas: Basement: 30.33 sq m (326 sq ft) Ground Floor: 72.68 sq m (782 sq ft) First Floor: 47.41 sq m (510 sq ft) Second Floor: 43.96 sq m (473 sq ft) Total 194.38 sq m(2092 sq ft) Tenure The property is understood to be held freehold. Price Offers in the region of &#92;&#92;u00a3295,000. Business Rates Description: Caf&#92;&#92;u00e9 and Premises Rateable Value: &#92;&#92;u00a36,600 Potential Uses The property offers significant flexibility in terms of future use and occupation. Given the scale and configuration of the accommodation, the building may suit a variety of alternative uses subject to the necessary planning consents, including retail, office, studio, wellness, hospitality or other leisure-related uses. Equally, the existing layout provides scope for further enhancement or reconfiguration to maximise the residential and commercial potential of the property, making it an attractive proposition for both investors and owner occupiers seeking a character property within a well-established Northumberland market town. Viewing Strictly by appointment by sole agents YoungsRPS. Contact Stephanie Dixon Tel: Legal Costs Each party is to bear their own legal costs. Local Authority Northumberland County Council, County Hall, Morpeth, NE61 2EF. Tel: Energy performance certificate The property has an Energy Performance Certificate Rating of d-88. A copy of the EPC and Recommendation Report is available on request.&#92;&quot;,&#92;&quot;shareDescription&#92;&quot;:null,&#92;&quot;keyFeatures&#92;&quot;:null,&#92;&quot;propertySubType&#92;&quot;:&#92;&quot;retail&#92;&quot;,&#92;&quot;name&#92;&quot;:&#92;&quot;Retail premises for sale&#92;&quot;,&#92;&quot;infoReelItems&#92;&quot;:null,&#92;&quot;analyticsTaxonomy&#92;&quot;:&#92;&quot;{&#x27;__typename&#x27;: &#x27;ListingAnalyticsTaxonomy&#x27;, &#x27;location&#x27;: &#x27;Rothbury&#x27;, &#x27;regionName&#x27;: &#x27;North East England&#x27;, &#x27;section&#x27;: &#x27;for-sale&#x27;, &#x27;areaName&#x27;: &#x27;Rothbury, Morpeth&#x27;, &#x27;bedsMax&#x27;: None, &#x27;bedsMin&#x27;: None, &#x27;branchId&#x27;: 83391, &#x27;branchLogoUrl&#x27;: &#x27;https://st.zoocdn.com/zoopla_static_agent_logo_(759410).png&#x27;, &#x27;branchName&#x27;: &#x27;YoungsRPS&#x27;, &#x27;brandName&#x27;: &#x27;YoungsRPS&#x27;, &#x27;chainFree&#x27;: False, &#x27;companyId&#x27;: 51084, &#x27;countryCode&#x27;: &#x27;gb&#x27;, &#x27;countyAreaName&#x27;: &#x27;Northumberland&#x27;, &#x27;currencyCode&#x27;: &#x27;GBP&#x27;, &#x27;displayAddress&#x27;: &#x27;High Street, Rothbury, Morpeth, Northumberland NE65&#x27;, &#x27;furnishedState&#x27;: &#x27;&#x27;, &#x27;groupId&#x27;: None, &#x27;hasEpc&#x27;: False, &#x27;hasFloorplan&#x27;: False, &#x27;incode&#x27;: &#x27;7TE&#x27;, &#x27;isRetirementHome&#x27;: False, &#x27;isSharedOwnership&#x27;: False, &#x27;listingCondition&#x27;: &#x27;pre-owned&#x27;, &#x27;listingId&#x27;: 73310018, &#x27;listingsCategory&#x27;: &#x27;commercial&#x27;, &#x27;listingStatus&#x27;: &#x27;for_sale&#x27;, &#x27;memberType&#x27;: &#x27;agent&#x27;, &#x27;numBaths&#x27;: None, &#x27;numBeds&#x27;: None, &#x27;numImages&#x27;: 25, &#x27;numRecepts&#x27;: None, &#x27;outcode&#x27;: &#x27;NE65&#x27;, &#x27;postalArea&#x27;: &#x27;NE&#x27;, &#x27;postTownName&#x27;: &#x27;Morpeth&#x27;, &#x27;priceActual&#x27;: 295000, &#x27;price&#x27;: 295000, &#x27;priceMax&#x27;: 300000, &#x27;priceMin&#x27;: 275000, &#x27;priceQualifier&#x27;: &#x27;offers_in_region_of&#x27;, &#x27;propertyHighlight&#x27;: &#x27;&#x27;, &#x27;propertyType&#x27;: &#x27;retail&#x27;, &#x27;sizeSqFeet&#x27;: &#x27;2092&#x27;, &#x27;smartTags&#x27;: [&#x27;attributes.basement&#x27;], &#x27;tenure&#x27;: None, &#x27;zindex&#x27;: 266628}&#92;&quot;},{&#92;&quot;pageTitle&#92;&quot;:null,&#92;&quot;summary&#92;&quot;:null,&#92;&quot;description&#92;&quot;:&#92;&quot;For Sale or To Let on Kings Road in North Ormesby, Middlesbrough. &#92;&#92;u00a316,000 Per Annum To Let. &#92;&#92;u00a3195,000 Freehold.&#92;&quot;,&#92;&quot;detailedDescription&#92;&quot;:&#92;&quot;Description 58a Kings Road North is a former doctor&#92;&#92;u2019s surgery, ideal for a variety of alternative commercial or community uses (subject to planning). The layout offers practical spaces including consulting and treatment rooms, waiting areas, and support facilities, making it perfect for healthcare, therapy, wellbeing, office, or community-focused tenants. It&#92;&#92;u2019s a great fit for beauty-related businesses and more. Location The property is prominently located on Kings Road North in Ormesby, a well-established residential and mixed-use area of Middlesbrough. The location benefits from good visibility, local footfall, and convenient access to public transport routes and nearby amenities.&#92;&quot;,&#92;&quot;shareDescription&#92;&quot;:null,&#92;&quot;keyFeatures&#92;&quot;:null,&#92;&quot;propertySubType&#92;&quot;:&#92;&quot;retail&#92;&quot;,&#92;&quot;name&#92;&quot;:&#92;&quot;Retail premises for sale&#92;&quot;,&#92;&quot;infoReelItems&#92;&quot;:null,&#92;&quot;analyticsTaxonomy&#92;&quot;:&#92;&quot;{&#x27;__typename&#x27;: &#x27;ListingAnalyticsTaxonomy&#x27;, &#x27;location&#x27;: &#x27;TS3 6EG&#x27;, &#x27;regionName&#x27;: &#x27;North East England&#x27;, &#x27;section&#x27;: &#x27;for-sale&#x27;, &#x27;areaName&#x27;: &#x27;&#x27;, &#x27;bedsMax&#x27;: None, &#x27;bedsMin&#x27;: None, &#x27;branchId&#x27;: 145698, &#x27;branchLogoUrl&#x27;: &#x27;https://st.zoocdn.com/zoopla_static_agent_logo_(773228).png&#x27;, &#x27;branchName&#x27;: &#x27;Align Chartered Surveyors&#x27;, &#x27;brandName&#x27;: &#x27;Align Chartered Surveyors&#x27;, &#x27;chainFree&#x27;: False, &#x27;companyId&#x27;: 113462, &#x27;countryCode&#x27;: &#x27;gb&#x27;, &#x27;countyAreaName&#x27;: &#x27;North Yorkshire&#x27;, &#x27;currencyCode&#x27;: &#x27;GBP&#x27;, &#x27;displayAddress&#x27;: &#x27;58A Kings Road, North Ormesby, Middlesbrough TS3&#x27;, &#x27;furnishedState&#x27;: &#x27;&#x27;, &#x27;groupId&#x27;: None, &#x27;hasEpc&#x27;: False, &#x27;hasFloorplan&#x27;: True, &#x27;incode&#x27;: &#x27;6EG&#x27;, &#x27;isRetirementHome&#x27;: False, &#x27;isSharedOwnership&#x27;: False, &#x27;listingCondition&#x27;: &#x27;pre-owned&#x27;, &#x27;listingId&#x27;: 72075420, &#x27;listingsCategory&#x27;: &#x27;commercial&#x27;, &#x27;listingStatus&#x27;: &#x27;for_sale&#x27;, &#x27;memberType&#x27;: &#x27;agent&#x27;, &#x27;numBaths&#x27;: None, &#x27;numBeds&#x27;: None, &#x27;numImages&#x27;: 9, &#x27;numRecepts&#x27;: None, &#x27;outcode&#x27;: &#x27;TS3&#x27;, &#x27;postalArea&#x27;: &#x27;TS&#x27;, &#x27;postTownName&#x27;: &#x27;&#x27;, &#x27;priceActual&#x27;: 195000, &#x27;price&#x27;: 195000, &#x27;priceMax&#x27;: 200000, &#x27;priceMin&#x27;: 190000, &#x27;priceQualifier&#x27;: &#x27;offers_in_region_of&#x27;, &#x27;propertyHighlight&#x27;: &#x27;&#x27;, &#x27;propertyType&#x27;: &#x27;retail&#x27;, &#x27;sizeSqFeet&#x27;: &#x27;1000_2045&#x27;, &#x27;smartTags&#x27;: None, &#x27;tenure&#x27;: &#x27;freehold&#x27;, &#x27;zindex&#x27;: None}&#92;&quot;}]&quot;' data-total-rows='5' data-total-columns='10' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;pageTitle&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;summary&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;description&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;detailedDescription&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;shareDescription&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;keyFeatures&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;propertySubType&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;name&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;infoReelItems&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;analyticsTaxonomy&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='false' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ROlb",
+      "code_hash": "b73a4103d154d481a5efe72e76038413",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"5-inspect-keyfeatures\">5. Inspect <code>keyFeatures</code></h2>\n<span class=\"paragraph\">The assignment specifically calls out <code>keyFeatures</code> as messy.</span>\n<span class=\"paragraph\">It appears to be a stringified list, so the production preprocessing step should parse it safely.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "qnkX",
+      "code_hash": "e53c49019a0f794a9aece1871e1470bf",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='qnkX-0' random-id='924dbabf-1966-2eac-6a88-2127c339bbd1'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;id&#92;&quot;:&#92;&quot;HK-F001&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;A1 Use Class&#x27;, &#x27;Former Co-op convenience store&#x27;, &#x27;1,850 sq ft ground floor&#x27;, &#x27;Vacant possession&#x27;, &#x27;High footfall town centre location&#x27;, &#x27;Rear loading access&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;89924760.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;EXCELLENT OPPORTUNITY to purchase a plot just over an acre of Land in PEACEFUL COUNTRYSIDE SETTING with panoramic countryside views. RARELY AVAILABLE parcel of ancient woodland.&#x27;, &#x27;PICTURESQUE LOCATION an abundance of flora and fauna. The ancient bluebell carpet is particularly spectacular. Also comprises some old flint quarries which are now gullies facing the lane.&#x27;, &#x27;The upper part of the woodland contains the bluebells but the old quarries are an excellent source of logs for wood burners. There is access to a water source nearby&#x27;, &#x27;This exceptional plot may represent an opportunity to build in a peaceful yet well-connected location subject to researching and gaining the necessary consents and usage rights. &#x27;, &#x27;EXCELLENT LOCATION Overall, Fryarne Park offers an attractive combination of rural tranquillity, strong community spirit, beautiful countryside, and access to Canterbury,&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;143478371.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Late 16th Century Suffolk freehouse&#x27;, &#x27;Detached period property overlooking the village church&#x27;, &#x27;Self-contained two bedroom accommodation&#x27;, &#x27;Large car park and trade garden&#x27;, &#x27;Popular village with primary and secondary school&#x27;, &#x27;EPC: C&#x27;, &#x27;Fleurets Ref: E-218248&#x27;, &#x27;Call to be sent the full brochure&#x27;, &#x27;+ SAV&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;758742929390929.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;FREEHOLD PRICE &#92;&#92;u00a3199,950&#x27;, &#x27;DEVELOPMENT POTENTIAL (STPC)&#x27;, &#x27;GREAT LOCATION&#x27;, &#x27;ESTABLISHED BUSINESS IN OCCUPATION&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;758775441528961.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Rare Opportunity for Healthcare and Medical Professionals&#x27;, &#x27;Versatile Space offering Multiple Treatment Rooms with ample Reception Area&#x27;, &#x27;Prime Location with Double Frontage&#x27;, &#x27;Private Designated Car Park with EV Charger&#x27;, &#x27;Excellent Transport links via road, rail, bus or walking distance to town centre&#x27;, &#x27;Internal ONLY repairing and insuring lease (subject to a service charge)&#x27;, &#x27;Deal directly with the Landlord - NO external agents&#x27;, &#x27;Flexible terms with rolling six-month break option&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;HK-F002&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;D1 (now Use Class F1) consent&#x27;, &#x27;Currently operating as independent SEN school&#x27;, &#x27;Capacity for 80 pupils aged 7-18&#x27;, &#x27;Sensory room and therapy suite&#x27;, &#x27;Outdoor sports facilities&#x27;, &#x27;Sale due to operator consolidation&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;HK-F004&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Two ground floor retail units&#x27;, &#x27;Upper floors let as 4 residential flats&#x27;, &#x27;Combined rental income &#92;&#92;u00a361,400 p.a.&#x27;, &#x27;Currently let to a vape retailer and a hairdresser&#x27;, &#x27;No current consent for childcare or education use&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;758763053880849.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Prime Cleveleys Trading Location&#x27;, &#x27;Accounts Available To 30th November 2024&#x27;, &#x27;Annual Turnover &#92;&#92;u00a3347,273 / Gross Profit &#92;&#92;u00a361,962&#x27;, &#x27;Registered For 75 Children&#x27;, &#x27;Good Ofsted Rated Nursery&#x27;, &#x27;Significant Growth Potential&#x27;, &#x27;Experienced Management Team&#x27;, &#x27;Open Year Round With Funding&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;88930830.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Prominent Freehold Building.&#x27;, &#x27;Appealing Period Architecture.&#x27;, &#x27;Attractive Capital value at just &#92;&#92;u00a3361 p/sq/ft.&#x27;, &#x27;Double Garage &amp;amp; Additional Parking.&#x27;, &#x27;Occupying a very substantial plot.&#x27;, &#x27;Immediate Development Opportunity (STP).&#x27;]&#92;&quot;},{&#92;&quot;id&#92;&quot;:&#92;&quot;758756684610048.0&#92;&quot;,&#92;&quot;keyFeatures&#92;&quot;:&#92;&quot;[&#x27;Airspace development opportunity&#x27;, &#x27;Consent to build a one-storey roof extension (3 apartments)&#x27;, &#x27;Proposed NIA is approx. 177.9 sqm (1,915 sqft)&#x27;, &#x27;Proposed GIA is approx. 211.5 sqm (2,277 sqft)&#x27;]&#92;&quot;}]&quot;' data-total-rows='10' data-total-columns='2' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;id&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;keyFeatures&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TqIu",
+      "code_hash": "02d54ac22580e7ba8920c8b6eb9979d2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/json": "[\"A1 Use Class\", \"Former Co-op convenience store\", \"1,850 sq ft ground floor\", \"Vacant possession\", \"High footfall town centre location\", \"Rear loading access\"]"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "0cd20b95efa2f1ad6307e5a92b440897",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"6-select-columns-for-preprocessing\">6. Select columns for preprocessing</h2>\n<span class=\"paragraph\">The preprocessing step should build a concise listing context for the LLM.</span>\n<span class=\"paragraph\">The goal is <strong>not</strong> to pass every available field. The goal is to pass the fields that describe the property itself.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "bf9d0ab9e8f8ee65a96822a5ca1967ea",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "da00cc74608b1d8361f9567ce037e6c2",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "dae21e4c1f7ee7ea0cbbab55b04cbc3b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"exploration-summary\">Exploration summary</h2>\n<span class=\"paragraph\"><strong>Dropped:</strong></span>\n<ul>\n<li>coordinates</li>\n<li>agent contact fields</li>\n<li>listing lifecycle metadata</li>\n<li>scrape/search metadata</li>\n<li>image counts</li>\n<li>fully empty columns</li>\n</ul>\n<span class=\"paragraph\"><strong>Kept for preprocessing:</strong></span>\n<ul>\n<li>listing title / summary</li>\n<li>descriptions</li>\n<li><code>keyFeatures</code></li>\n<li>property subtype / name</li>\n<li>location</li>\n<li>size, tenure, and price as supporting context</li>\n</ul>\n<span class=\"paragraph\"><strong>Implementation note:</strong></span>\n<span class=\"paragraph\">In <code>preprocessing.py</code>, each listing should be converted into a concise text block for the LLM.</span>\n<span class=\"paragraph\">The preprocessing function should:</span>\n<ul>\n<li>skip null fields</li>\n<li>parse <code>keyFeatures</code> safely</li>\n<li>avoid dumping all 67 raw columns into the model</li>\n<li>preserve the original <code>id</code> for the output file</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
