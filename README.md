@@ -98,6 +98,7 @@ property-classifier/
 │   ├── marimo_column_profile.png
 │   ├── marimo_candidate_profile.png
 │   ├── exploration_summary.png
+│   ├── results.png
 │
 ├── README.md
 │
