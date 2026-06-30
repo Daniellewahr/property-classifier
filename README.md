@@ -73,12 +73,11 @@ property-classifier/
 │
 ├── data/
 │   └── listings.csv
+│   └── classified_listings.csv
 │
 ├── notebooks/
 │   └── data_exploration.py
 │
-├── output/
-│   └── classified_listings.csv
 │
 ├── src/
 │   ├── classifier.py
