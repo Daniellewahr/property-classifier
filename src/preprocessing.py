@@ -4,53 +4,25 @@ import ast
 import math
 from typing import Any
 
-from models import PreprocessedListing
+from src.models import PreprocessedListing
 
-
-PREPROCESSING_COLUMNS = [
-    "pageTitle",
-    "summary",
-    "description",
-    "detailedDescription",
-    "shareDescription",
-    "keyFeatures",
-    "propertySubType",
-    "name",
-    "displayAddress",
-    "address",
-    "postalCode",
-    "Region",
-    "sizeFt",
-    "sizeAc",
-    "tenure",
-    "tenureFull",
-    "price",
-    "primaryPrice",
-    "pricePerUnit",
-]
-
-
-FIELD_LABELS = {
-    "pageTitle": "Page title",
-    "summary": "Summary",
-    "description": "Description",
-    "detailedDescription": "Detailed description",
-    "shareDescription": "Share description",
-    "keyFeatures": "Key features",
-    "propertySubType": "Property subtype",
-    "name": "Listing name",
-    "displayAddress": "Display address",
-    "address": "Address",
-    "postalCode": "Postal code",
-    "Region": "Region",
-    "sizeFt": "Size in square feet",
-    "sizeAc": "Size in acres",
-    "tenure": "Tenure",
-    "tenureFull": "Full tenure",
-    "price": "Price",
-    "primaryPrice": "Primary price",
-    "pricePerUnit": "Price per unit",
-}
+# Fields selected during data exploration that provide useful semantic context
+# for the LLM. Each tuple contains the source column and the label used in the prompt.
+CONTEXT_FIELDS = (
+    ("pageTitle", "Page title"),
+    ("summary", "Summary"),
+    ("description", "Description"),
+    ("detailedDescription", "Detailed description"),
+    ("shareDescription", "Share description"),
+    ("keyFeatures", "Key features"),
+    ("propertySubType", "Property subtype"),
+    ("name", "Listing name"),
+    ("displayAddress", "Display address"),
+    ("address", "Address"),
+    ("postalCode", "Postal code"),
+    ("Region", "Region"),
+    ("price", "Price"),
+)
 
 
 def is_missing(value: Any) -> bool:
@@ -79,8 +51,9 @@ def parse_key_features(value: Any) -> list[str]:
     """
     Parse the keyFeatures field.
 
-    In the source CSV, keyFeatures is a stringified Python-style list rather
-    than clean JSON. We parse it safely and fall back to the raw text if needed.
+    The source CSV stores key features as a stringified Python list rather
+    than valid JSON. Parse it safely and fall back to the raw text if
+    parsing fails.
     """
     if is_missing(value):
         return []
@@ -102,7 +75,7 @@ def parse_key_features(value: Any) -> list[str]:
 
 
 def format_key_features(value: Any) -> str:
-    """Format parsed key features as a bullet list."""
+    """Format key features as a bulleted list."""
     features = parse_key_features(value)
 
     if not features:
@@ -111,46 +84,58 @@ def format_key_features(value: Any) -> str:
     return "\n".join(f"- {feature}" for feature in features)
 
 
-def format_field(field: str, value: Any) -> str:
-    """Format a single listing field for the LLM context."""
+def format_field(
+    label: str,
+    field: str,
+    value: Any,
+) -> str:
+    """Format a single field for the LLM context."""
     if field == "keyFeatures":
-        formatted_features = format_key_features(value)
+        formatted = format_key_features(value)
 
-        if not formatted_features:
+        if not formatted:
             return ""
 
-        return f"{FIELD_LABELS[field]}:\n{formatted_features}"
+        return f"{label}:\n{formatted}"
 
-    cleaned_value = clean_text(value)
+    cleaned = clean_text(value)
 
-    if not cleaned_value:
+    if not cleaned:
         return ""
 
-    label = FIELD_LABELS.get(field, field)
-
-    return f"{label}: {cleaned_value}"
+    return f"{label}: {cleaned}"
 
 
-def build_listing_context(listing: dict[str, Any]) -> str:
+def build_listing_context(
+    listing: dict[str, Any],
+) -> str:
     """
-    Build the concise text context sent to the LLM.
+    Build the text context sent to the language model.
 
-    We intentionally include only property-level fields identified during
-    exploration, rather than dumping every raw CSV column into the prompt.
+    Only property-level information is included. Listing metadata,
+    agent details, and scrape metadata are intentionally omitted.
     """
-    sections = [
-        formatted_field
-        for field in PREPROCESSING_COLUMNS
-        if (formatted_field := format_field(field, listing.get(field)))
-    ]
+    sections: list[str] = []
+
+    for field, label in CONTEXT_FIELDS:
+        formatted = format_field(
+            label=label,
+            field=field,
+            value=listing.get(field),
+        )
+
+        if formatted:
+            sections.append(formatted)
 
     return "\n\n".join(sections)
 
 
-def preprocess_listing(listing: dict[str, Any]) -> PreprocessedListing:
-    """Convert one raw listing row into the classifier input format."""
+def preprocess_listing(
+    listing: dict[str, Any],
+) -> PreprocessedListing:
+    """Convert one raw listing into the classifier input format."""
     return PreprocessedListing(
-        id=str(listing.get("id")),
+        id=str(listing["id"]),
         context=build_listing_context(listing),
     )
 
@@ -158,5 +143,19 @@ def preprocess_listing(listing: dict[str, Any]) -> PreprocessedListing:
 def preprocess_listings(
     listings: list[dict[str, Any]],
 ) -> list[PreprocessedListing]:
-    """Convert raw listing rows into classifier input format."""
+    """Convert raw listings into classifier inputs."""
     return [preprocess_listing(listing) for listing in listings]
+
+
+def test_empty_fields_are_removed():
+    listing = {
+        "summary": "",
+        "description": None,
+        "pageTitle": "Food Store",
+    }
+
+    context = build_listing_context(listing)
+
+    assert "Food Store" in context
+    assert "Summary" not in context
+    assert "Description" not in context

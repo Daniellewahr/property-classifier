@@ -61,3 +61,12 @@ Listing:
 
 {listing_context}
 """
+
+
+def build_classification_prompt(listing_context: str) -> str:
+    """
+    Build the user prompt for a single property listing.
+    """
+    return USER_PROMPT_TEMPLATE.format(
+        listing_context=listing_context,
+    )

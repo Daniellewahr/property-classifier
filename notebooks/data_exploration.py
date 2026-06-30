@@ -6,10 +6,11 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
+    import ast
+    from pathlib import Path
+
     import marimo as mo
     import polars as pl
-    from pathlib import Path
-    import ast
 
     return Path, ast, mo, pl
 
@@ -54,10 +55,12 @@ def _(mo):
 
 @app.cell
 def _(listings_df, pl):
-    schema_df = pl.DataFrame({
-        "column": listings_df.columns,
-        "dtype": [str(dtype) for dtype in listings_df.dtypes],
-    })
+    schema_df = pl.DataFrame(
+        {
+            "column": listings_df.columns,
+            "dtype": [str(dtype) for dtype in listings_df.dtypes],
+        }
+    )
 
     schema_df
     return
@@ -66,22 +69,23 @@ def _(listings_df, pl):
 @app.cell
 def _(listings_df, pl):
     column_profile = (
-        listings_df
-        .null_count()
+        listings_df.null_count()
         .transpose(
             include_header=True,
             header_name="column",
             column_names=["null_count"],
         )
-        .with_columns([
-            (pl.col("null_count") / listings_df.height * 100)
-            .round(2)
-            .alias("percent_missing"),
-            pl.Series(
-                "unique_values",
-                [listings_df[col].n_unique() for col in listings_df.columns],
-            ),
-        ])
+        .with_columns(
+            [
+                (pl.col("null_count") / listings_df.height * 100)
+                .round(2)
+                .alias("percent_missing"),
+                pl.Series(
+                    "unique_values",
+                    [listings_df[col].n_unique() for col in listings_df.columns],
+                ),
+            ]
+        )
         .sort("percent_missing", descending=True)
     )
 
@@ -107,7 +111,6 @@ def _(listings_df):
         # Coordinates
         "latitude",
         "longitude",
-
         # Listing lifecycle / metadata
         "firstVisibleDate",
         "listingUpdateDate",
@@ -116,7 +119,6 @@ def _(listings_df):
         "postedDate",
         "monthsSincePosted",
         "listingHistory",
-
         # Agent information
         "agentCompanyAddress",
         "agentCompanyName",
@@ -128,20 +130,16 @@ def _(listings_df):
         "agentStreet",
         "agentPostcode",
         "agentCity",
-
         # Search / scrape metadata
         "matched_keyword",
         "keyword",
         "changed_columns",
-
         # Images
         "numberOfImages",
     ]
 
     existing_drop_columns = [
-        column
-        for column in DROP_COLUMNS
-        if column in listings_df.columns
+        column for column in DROP_COLUMNS if column in listings_df.columns
     ]
 
     candidate_df = listings_df.drop(existing_drop_columns)
@@ -183,22 +181,26 @@ def _(mo):
 @app.cell
 def _(candidate_df, pl):
     candidate_profile = (
-        candidate_df
-        .null_count()
+        candidate_df.null_count()
         .transpose(
             include_header=True,
             header_name="column",
             column_names=["null_count"],
         )
-        .with_columns([
-            (pl.col("null_count") / candidate_df.height * 100)
-            .round(2)
-            .alias("percent_missing"),
-            pl.Series(
-                "unique_values",
-                [candidate_df[column].n_unique() for column in candidate_df.columns],
-            ),
-        ])
+        .with_columns(
+            [
+                (pl.col("null_count") / candidate_df.height * 100)
+                .round(2)
+                .alias("percent_missing"),
+                pl.Series(
+                    "unique_values",
+                    [
+                        candidate_df[column].n_unique()
+                        for column in candidate_df.columns
+                    ],
+                ),
+            ]
+        )
         .sort("percent_missing", descending=True)
     )
 
@@ -212,23 +214,22 @@ def _(candidate_df, pl):
 
     for column, dtype in candidate_df.schema.items():
         if dtype == pl.String:
-            text_column_stats.append({
-                "column": column,
-                "non_null_count": candidate_df.select(
-                    pl.col(column).is_not_null().sum()
-                ).item(),
-                "avg_chars": candidate_df.select(
-                    pl.col(column).fill_null("").str.len_chars().mean()
-                ).item(),
-                "max_chars": candidate_df.select(
-                    pl.col(column).fill_null("").str.len_chars().max()
-                ).item(),
-            })
+            text_column_stats.append(
+                {
+                    "column": column,
+                    "non_null_count": candidate_df.select(
+                        pl.col(column).is_not_null().sum()
+                    ).item(),
+                    "avg_chars": candidate_df.select(
+                        pl.col(column).fill_null("").str.len_chars().mean()
+                    ).item(),
+                    "max_chars": candidate_df.select(
+                        pl.col(column).fill_null("").str.len_chars().max()
+                    ).item(),
+                }
+            )
 
-    (
-        pl.DataFrame(text_column_stats)
-        .sort("avg_chars", descending=True)
-    )
+    (pl.DataFrame(text_column_stats).sort("avg_chars", descending=True))
     return
 
 
@@ -260,9 +261,7 @@ def _(candidate_df):
     ]
 
     existing_candidate_text_columns = [
-        column
-        for column in CANDIDATE_TEXT_COLUMNS
-        if column in candidate_df.columns
+        column for column in CANDIDATE_TEXT_COLUMNS if column in candidate_df.columns
     ]
 
     existing_candidate_text_columns
@@ -275,8 +274,7 @@ def _(candidate_df, existing_candidate_text_columns):
     row_index = 0
 
     (
-        candidate_df
-        .select(existing_candidate_text_columns)
+        candidate_df.select(existing_candidate_text_columns)
         .slice(row_index, 1)
         .transpose(include_header=True)
     )
@@ -305,8 +303,7 @@ def _(mo):
 @app.cell
 def _(candidate_df, pl):
     (
-        candidate_df
-        .filter(pl.col("keyFeatures").is_not_null())
+        candidate_df.filter(pl.col("keyFeatures").is_not_null())
         .select("id", "keyFeatures")
         .head(10)
     )
@@ -316,8 +313,7 @@ def _(candidate_df, pl):
 @app.cell
 def _(ast, candidate_df, pl):
     key_feature_sample = (
-        candidate_df
-        .filter(pl.col("keyFeatures").is_not_null())
+        candidate_df.filter(pl.col("keyFeatures").is_not_null())
         .select("keyFeatures")
         .item(0, 0)
     )
@@ -343,7 +339,6 @@ def _(candidate_df):
     PREPROCESSING_COLUMNS = [
         # Required output identifier
         "id",
-
         # Strong text signal
         "pageTitle",
         "summary",
@@ -351,17 +346,14 @@ def _(candidate_df):
         "detailedDescription",
         "shareDescription",
         "keyFeatures",
-
         # Property attributes
         "propertySubType",
         "name",
-
         # Location context
         "displayAddress",
         "address",
         "postalCode",
         "Region",
-
         # Supporting commercial context
         "sizeFt",
         "sizeAc",
@@ -373,9 +365,7 @@ def _(candidate_df):
     ]
 
     selected_columns = [
-        column
-        for column in PREPROCESSING_COLUMNS
-        if column in candidate_df.columns
+        column for column in PREPROCESSING_COLUMNS if column in candidate_df.columns
     ]
 
     preprocessing_df = candidate_df.select(selected_columns)
