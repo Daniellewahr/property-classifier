@@ -1,4 +1,0 @@
-polars
-pydantic
-python-dotenv
-openai
